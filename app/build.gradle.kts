@@ -53,3 +53,16 @@ android {
 dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
 }
+
+// Align Kotlin stdlib. An old transitive kotlin-stdlib-jdk7/jdk8:1.6.21 clashes with
+// kotlin-stdlib:1.8.22 (their classes merged into kotlin-stdlib in Kotlin 1.8), which
+// produces "Duplicate class kotlin.*" errors. Pin everything to one version.
+configurations.configureEach {
+    resolutionStrategy {
+        force(
+            "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"
+        )
+    }
+}
