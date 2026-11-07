@@ -66,6 +66,9 @@ original owner/SELinux context, and back up to `/data/local/tmp/hyperstack/backu
 - Push to `main` → the `build` workflow builds a debug APK (compile check / quick test).
 - Push a tag `v*` → the `release` workflow builds a **signed** release APK and attaches it to
   the GitHub release. Tags containing `beta`, `alpha` or `rc` are published as **pre-releases**.
+- Rebuild an existing release without moving its tag:
+  `gh workflow run release.yml --ref refs/tags/v0.0.2-beta` (or Actions → release → Run workflow
+  on that tag).
 
 ### Locally
 ```bash
