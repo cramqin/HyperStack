@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#101418</color>
+
+    <!-- Light scheme (green brand) -->
+    <color name="colorPrimary">#146B3A</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorPrimaryContainer">#A8F0C6</color>
+    <color name="colorOnPrimaryContainer">#00210F</color>
 </resources>

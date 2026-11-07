@@ -66,7 +66,7 @@ final class RootShell {
             int code = process.waitFor();
             return new Result(code, buffer.toString("UTF-8"));
         } catch (Exception e) {
-            return new Result(-1, "su error: " + e);
+            return new Result(-1, "ROOT_UNAVAILABLE: cannot run su (" + e.getMessage() + ")");
         } finally {
             if (process != null) {
                 process.destroy();

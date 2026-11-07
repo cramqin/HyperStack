@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark scheme (green brand) -->
+    <color name="colorPrimary">#7BE0A6</color>
+    <color name="colorOnPrimary">#00391E</color>
+    <color name="colorPrimaryContainer">#00522F</color>
+    <color name="colorOnPrimaryContainer">#A8F0C6</color>
+</resources>

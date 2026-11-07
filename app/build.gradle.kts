@@ -52,6 +52,7 @@ android {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
 }
 
 // Align Kotlin stdlib. An old transitive kotlin-stdlib-jdk7/jdk8:1.6.21 clashes with

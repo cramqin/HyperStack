@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        applyInsets(findViewById(R.id.root));
+
         output = findViewById(R.id.output);
         scroll = findViewById(R.id.scroll);
 
@@ -47,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_clear).setOnClickListener(v -> clearLog());
 
         runAsset("check.sh", "System check");
+    }
+
+    private void applyInsets(View root) {
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return insets;
+        });
     }
 
     private void runAsset(final String assetName, final String label) {
@@ -68,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
             String out = r.output == null ? "" : r.output.trim();
             appendLog(out.isEmpty() ? "(no output)" : out);
 
-            if (r.output != null && r.output.contains("SUCCESS") && r.ok()) {
+            if (r.code < 0 || out.contains("ROOT_UNAVAILABLE") || out.contains("not running as root")) {
+                appendLog("-> Root not granted. Allow superuser access for HyperStack (Magisk/KernelSU), then retry.");
+            } else if (out.contains("SUCCESS")) {
                 ui.post(() -> Toast.makeText(this, R.string.done_toast, Toast.LENGTH_SHORT).show());
             }
         });

@@ -45,3 +45,4 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: dist/*.apk
+          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') || contains(github.ref_name, 'rc') }}

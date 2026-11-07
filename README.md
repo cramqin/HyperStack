@@ -28,7 +28,7 @@ widgets are not stackable — that's a HyperOS design limit, not something this 
 
 ## Usage
 
-1. Install the APK (use the **release** APK — see [Signing](#signing--updates)).
+1. Install the APK (use the **release** APK — see [Signing and updates](#signing-and-updates)).
 2. Open it; grant the superuser prompt.
 3. **Turn on** → then **Restart Launcher** (or **Restart SystemUI**) to apply.
 4. Go to the home screen and stack two same-size MIUI widgets.
@@ -65,7 +65,7 @@ original owner/SELinux context, and back up to `/data/local/tmp/hyperstack/backu
 ### GitHub Actions
 - Push to `main` → the `build` workflow builds a debug APK (compile check / quick test).
 - Push a tag `v*` → the `release` workflow builds a **signed** release APK and attaches it to
-  the GitHub release.
+  the GitHub release. Tags containing `beta`, `alpha` or `rc` are published as **pre-releases**.
 
 ### Locally
 ```bash
@@ -74,7 +74,7 @@ original owner/SELinux context, and back up to `/data/local/tmp/hyperstack/backu
 ./gradlew assembleRelease   # release (debug-signed unless KEYSTORE_FILE is set)
 ```
 
-## Signing & updates
+## Signing and updates
 
 So that `0.0.2-beta` installs **over** `0.0.1-beta` (Android requires the same signature), the
 release APK is signed with a stable keystore stored in repository secrets:
@@ -93,13 +93,28 @@ still work.
 > Keep a backup of the keystore. If it changes, users must uninstall before installing a newer
 > version. Install the **release** APK (not the CI debug artifact) so updates keep working.
 
-## Why an app? (app vs LSPosed vs Magisk)
+## Why an app?
 
 | Option | Works? | Why |
 |---|---|---|
 | **App (this)** | ✅ | Runs `su` at runtime; works on temp **and** persistent root; one-tap, reversible. |
 | LSPosed | ❌ | Launcher is Flutter + Rust with **no `classes.dex`**; the gate is native, nothing for Xposed to hook. |
 | Magisk/KSU module | ⚠️ | Works, but needs persistent root and re-applies at boot; more fragile across updates. |
+
+## FAQ
+
+**What if I lose root, or my temporary root disappears after a reboot?**
+Nothing breaks — no bootloop, no crash, no brick. The unlock is just a preference stored in the
+launcher's own data (`/data/user_de/0/com.miui.home/shared_prefs/…`), which **persists across
+reboots**. With the flag set, stacking keeps working even with root gone. Without root the app
+simply can't run its commands (it shows "Root not granted") and can't toggle the flag until root
+is back. The app has no boot-time service and does not auto-start, so it can never affect boot.
+
+**To turn it off you need root again.** If you're unrooted and want to revert, either re-gain
+root and tap **Turn off**, or clear the launcher's data (which resets the home screen layout).
+
+**Why is `0.0.1-beta` a pre-release?** Tags with `beta`/`alpha`/`rc` are published as
+pre-releases by the workflow.
 
 ## Notes & disclaimer
 
