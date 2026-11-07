@@ -36,11 +36,12 @@ widgets are not stackable — that's a HyperOS design limit, not something this 
 
 1. Install the APK (use the **release** APK — see [Signing and updates](#signing-and-updates)).
 2. Open it; grant the superuser prompt.
-3. **Turn on** → then **Restart Launcher** (or **Restart SystemUI**) to apply.
-4. Go to the home screen and stack two same-size MIUI widgets.
-5. **Turn off** + **Restart Launcher** to fully revert.
+3. **Turn on** — it writes the flag and cycles the launcher automatically (a few seconds).
+4. On the home screen, long‑press one same‑size MIUI widget and drop it onto another.
+5. **Turn off** to revert (also cycles the launcher).
 
-The in-app console shows the output of each action; **Copy log** / **Clear log** are provided.
+**Restart Launcher** / **Restart SystemUI** are there if you want to force a refresh. The
+console shows each action's output; **Copy log** / **Clear log** are provided, and
 **System check** prints a device/launcher/flag report.
 
 ## How it works
