@@ -12,6 +12,12 @@ single tap.
 > Rust), so LSPosed can't hook it. A tiny root app that writes one preference is the correct
 > tool. See [Why an app?](#why-an-app).
 
+> **Status:** a hobby project, made in free time **with DeepSeek AI**. It was only tested on one
+> device — Xiaomi 25113PN0EG ("pudding"), HyperOS 4.0.1.0 XPCMIXM, launcher
+> `RELEASE-8.01.02.7755` — so it is **not guaranteed to work on every device / ROM / launcher
+> build**. If something breaks or doesn't work, open an Issue ("ticket") and attach the in-app
+> **Copy log** / **System check** output (see [Support](#support)).
+
 ## What it does
 
 Long-press and stack two **MIUI / App Vault widgets** of the same size on the home screen and
@@ -127,6 +133,19 @@ pre-releases by the workflow.
   not a bug introduced here.
 - Use at your own risk. You are modifying another app's private data as root. Backups are made
   automatically, but you are responsible for your device.
+
+## Support
+
+This is a free-time hobby project **made with DeepSeek AI**, provided as-is with no guarantee.
+Tested only on the single device/build listed at the top; your mileage may vary.
+
+If it doesn't work or something breaks:
+
+1. In the app, run **System check** and tap **Copy log** (or copy the console).
+2. Open a GitHub **Issue** and paste that log, plus: device model/codename, HyperOS version,
+   launcher `versionName`, and your root solution (Magisk / KernelSU / temp root).
+
+I can't promise fixes, but a log makes it diagnosable.
 
 ## License
 
