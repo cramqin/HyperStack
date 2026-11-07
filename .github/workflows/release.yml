@@ -20,14 +20,27 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Decode signing keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.keystore"
+
+      - name: Build signed release APK
+        env:
+          KEYSTORE_FILE: ${{ runner.temp }}/release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Verify signature
+        run: |
+          APK=app/build/outputs/apk/release/app-release.apk
+          APKSIGNER=$(find "${ANDROID_HOME:-/usr/local/lib/android/sdk}/build-tools" -name apksigner -type f 2>/dev/null | sort -V | tail -1)
+          if [ -n "$APKSIGNER" ]; then "$APKSIGNER" verify --print-certs "$APK"; else echo "apksigner not found, skipping"; fi
 
       - name: Rename artifact
         run: |
           mkdir -p dist
-          cp app/build/outputs/apk/debug/app-debug.apk \
-             "dist/HyperStack-${GITHUB_REF_NAME}.apk"
+          cp app/build/outputs/apk/release/app-release.apk "dist/HyperStack-${GITHUB_REF_NAME}.apk"
 
       - uses: softprops/action-gh-release@v2
         with:

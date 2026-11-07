@@ -3,9 +3,14 @@
     <string name="app_name">HyperStack</string>
     <string name="header">HyperOS 4 Stacked Widgets</string>
     <string name="subtitle">Unlocks home-screen widget stacking on the V8 launcher.\nRequires root (Magisk / KernelSU / temp root).</string>
-    <string name="enable">Enable</string>
-    <string name="disable">Disable</string>
-    <string name="refresh">Refresh status</string>
-    <string name="done_toast">Done. Return to your home screen.</string>
-    <string name="footer">Only affects MIUI/App Vault widgets. Reversible — “Disable” removes the flag.</string>
+    <string name="turn_on">Turn on</string>
+    <string name="turn_off">Turn off</string>
+    <string name="restart_launcher">Restart Launcher</string>
+    <string name="restart_systemui">Restart SystemUI</string>
+    <string name="system_check">System check</string>
+    <string name="copy_log">Copy log</string>
+    <string name="clear_log">Clear log</string>
+    <string name="copied">Log copied</string>
+    <string name="done_toast">Done.</string>
+    <string name="footer">Only affects MIUI/App Vault widgets. “Turn off” removes the flag.</string>
 </resources>

@@ -1,4 +1,4 @@
-# HyperStack - disable stacked widgets (revert)
+# HyperStack - turn stacked widgets OFF (removes the flag).
 PKG=com.miui.home
 DE=/data/user_de/0/$PKG/shared_prefs
 
@@ -7,7 +7,7 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-echo "Stopping launcher..."
+echo "Stopping launcher so it won't overwrite the edit..."
 am force-stop $PKG >/dev/null 2>&1
 sleep 1
 
@@ -36,6 +36,5 @@ for f in launcher_sharedpreference.xml launcher_sharedpreference_private.xml; do
 done
 
 echo ""
-echo "Restarting launcher..."
-am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null 2>&1
-echo "SUCCESS: reverted ($COUNT file(s) cleaned)."
+echo "SUCCESS: stacked widgets disabled."
+echo "Now tap \"Restart Launcher\" to apply."

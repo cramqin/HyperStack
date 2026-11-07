@@ -4,23 +4,21 @@
 
 HyperOS 4's System Launcher (V8, the Flutter/Rust rewrite) ships widget stacking but gates
 it behind a China/App-Vault flag. HyperStack flips the launcher's own hidden
-`debug_force_stack_widget` preference so the feature turns on. It is a **runtime** change to
+`debug_force_stack_widget` preference so the feature turns on. It's a **runtime** change to
 launcher app-data — nothing is flashed, no system partition is touched, and it is undone by a
-single tap (or a reboot plus clearing the launcher).
+single tap.
 
 > This is **not** an LSPosed or Magisk module. The launcher has no `classes.dex` (it's Dart +
 > Rust), so LSPosed can't hook it. A tiny root app that writes one preference is the correct
 > tool. See [Why an app?](#why-an-app).
 
----
-
 ## What it does
 
 Long-press and stack two **MIUI / App Vault widgets** of the same size on the home screen and
-swipe between them. HyperStack unlocks that ability on Global builds where Xiaomi leaves it off.
+swipe between them. HyperStack unlocks that on Global builds where Xiaomi leaves it off.
 
-It only affects **MIUI widgets** (the App Vault "minus screen" widgets). Third-party Android
-app widgets are not stackable — that's a HyperOS design limit, not something this can change.
+It only affects **MIUI widgets** (App Vault "minus screen" widgets). Third-party Android app
+widgets are not stackable — that's a HyperOS design limit, not something this can change.
 
 ## Requirements
 
@@ -28,9 +26,20 @@ app widgets are not stackable — that's a HyperOS design limit, not something t
 - HyperOS 4 with the V8 launcher (`com.miui.home`, `RELEASE-8.0…`).
 - App Vault / minus screen present (`com.mi.globalminusscreen` or `com.miui.personalassistant`).
 
+## Usage
+
+1. Install the APK (use the **release** APK — see [Signing](#signing--updates)).
+2. Open it; grant the superuser prompt.
+3. **Turn on** → then **Restart Launcher** (or **Restart SystemUI**) to apply.
+4. Go to the home screen and stack two same-size MIUI widgets.
+5. **Turn off** + **Restart Launcher** to fully revert.
+
+The in-app console shows the output of each action; **Copy log** / **Clear log** are provided.
+**System check** prints a device/launcher/flag report.
+
 ## How it works
 
-The launcher's gate is one function in `libapp_launcher.so`:
+The gate is one function in `libapp_launcher.so`:
 
 ```
 LauncherUtils::is_support_stack_widget()
@@ -48,32 +57,41 @@ The real preferences live in **device-protected storage** (not `/data/data`):
 /data/user_de/0/com.miui.home/shared_prefs/launcher_sharedpreference_private.xml
 ```
 
-The app inserts `<boolean name="debug_force_stack_widget" value="true"/>` into those files,
-restores the original owner/SELinux context, restarts the launcher, and keeps a backup under
-`/data/local/tmp/hyperstack/backup/`.
-
-## Usage
-
-1. Install the APK.
-2. Open it and grant the superuser prompt when it runs.
-3. **Enable** → go to your home screen → stack two same-size MIUI widgets.
-4. **Disable** removes the flag (full revert).
+The scripts insert `<boolean name="debug_force_stack_widget" value="true"/>`, restore the
+original owner/SELinux context, and back up to `/data/local/tmp/hyperstack/backup/`.
 
 ## Build
 
-### GitHub Actions (recommended)
-Push to `main`; the `build` workflow produces `HyperStack-debug` as a downloadable artifact.
-Tag `v1.0.0` to publish a release APK automatically.
+### GitHub Actions
+- Push to `main` → the `build` workflow builds a debug APK (compile check / quick test).
+- Push a tag `v*` → the `release` workflow builds a **signed** release APK and attaches it to
+  the GitHub release.
 
 ### Locally
 ```bash
 # Requires JDK 17 and the Android SDK (ANDROID_HOME set)
-./gradlew assembleDebug
-# -> app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleDebug     # debug
+./gradlew assembleRelease   # release (debug-signed unless KEYSTORE_FILE is set)
 ```
 
-> The APK is debug-signed so it installs by sideloading. For your own release signing, add a
-> `signingConfig` in `app/build.gradle.kts`.
+## Signing & updates
+
+So that `0.0.2-beta` installs **over** `0.0.1-beta` (Android requires the same signature), the
+release APK is signed with a stable keystore stored in repository secrets:
+
+| Secret              | Value                                             |
+|---------------------|---------------------------------------------------|
+| `KEYSTORE_BASE64`   | base64 of the `.keystore` file (single line)      |
+| `KEYSTORE_PASSWORD` | keystore password                                 |
+| `KEY_ALIAS`         | key alias (e.g. `hyperstack`)                     |
+| `KEY_PASSWORD`      | key password                                      |
+
+`app/build.gradle.kts` reads these via env vars (`KEYSTORE_FILE`, `KEYSTORE_PASSWORD`,
+`KEY_ALIAS`, `KEY_PASSWORD`). With no secrets it falls back to the debug key so local builds
+still work.
+
+> Keep a backup of the keystore. If it changes, users must uninstall before installing a newer
+> version. Install the **release** APK (not the CI debug artifact) so updates keep working.
 
 ## Why an app? (app vs LSPosed vs Magisk)
 

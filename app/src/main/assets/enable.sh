@@ -1,5 +1,5 @@
-# HyperStack - enable stacked widgets
-# Runs as root (piped to `su -c "sh -s"`).
+# HyperStack - turn staged widgets ON (writes the flag, stops launcher so it
+# can't overwrite the edit). Apply with "Restart Launcher".
 PKG=com.miui.home
 DE=/data/user_de/0/$PKG/shared_prefs
 BK=/data/local/tmp/hyperstack/backup/$(date +%Y%m%d_%H%M%S)
@@ -10,15 +10,12 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 if [ ! -d "$DE" ]; then
-  echo "ERROR: $DE not found (is the launcher initialized?)"
+  echo "ERROR: $DE not found (launcher not initialized?)"
   exit 1
 fi
 
 mkdir -p "$BK" 2>/dev/null
-echo "Backup dir: $BK"
-echo ""
-
-echo "Stopping launcher..."
+echo "Stopping launcher so it won't overwrite the edit..."
 am force-stop $PKG >/dev/null 2>&1
 sleep 1
 
@@ -50,11 +47,11 @@ for f in launcher_sharedpreference.xml launcher_sharedpreference_private.xml; do
   fi
 done
 
+echo "Backup: $BK"
 echo ""
 if [ "$COUNT" -gt 0 ]; then
-  echo "Restarting launcher..."
-  am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null 2>&1
-  echo "SUCCESS: stacked widgets enabled ($COUNT file(s) patched)."
+  echo "SUCCESS: stacked widgets enabled."
+  echo "Now tap \"Restart Launcher\" (or \"Restart SystemUI\") to apply."
 else
   echo "ERROR: nothing was patched."
   exit 1
