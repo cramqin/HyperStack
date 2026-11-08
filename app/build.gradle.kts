@@ -10,8 +10,8 @@ android {
         applicationId = "dev.hyperstack"
         minSdk = 29
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.0.3-beta"
+        versionCode = 4
+        versionName = "0.0.4-beta"
     }
 
     signingConfigs {

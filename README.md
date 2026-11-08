@@ -123,6 +123,15 @@ is back. The app has no boot-time service and does not auto-start, so it can nev
 **To turn it off you need root again.** If you're unrooted and want to revert, either re-gain
 root and tap **Turn off**, or clear the launcher's data (which resets the home screen layout).
 
+**If I revoke root (e.g. remove HyperStack's superuser grant), does stacking turn off?** No.
+The flag is already written into the launcher's data; revoking root only stops the app from
+*toggling* it. Stacking stays on until you re-grant root and tap **Turn off**.
+
+**Does toggling reset my home-screen layout / grid / transitions?** Not in `0.0.4-beta` and
+later — fixing an earlier bug where disabling could clear the launcher's preferences. Updates
+are applied by editing a single element and cycling the launcher; enable/disable leave the rest
+of your preferences intact.
+
 **Why is `0.0.1-beta` a pre-release?** Tags with `beta`/`alpha`/`rc` are published as
 pre-releases by the workflow.
 
