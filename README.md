@@ -18,6 +18,12 @@ single tap.
 > build**. If something breaks or doesn't work, open an Issue ("ticket") and attach the in-app
 > **Copy log** / **System check** output (see [Support](#support)).
 
+## Demo
+
+![HyperStack in action](docs/demo.gif)
+
+_Full-quality recording: [docs/demo.mp4](docs/demo.mp4)._
+
 ## What it does
 
 Long-press and stack two **MIUI / App Vault widgets** of the same size on the home screen and
