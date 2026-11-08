@@ -74,7 +74,7 @@ original owner/SELinux context, and back up to `/data/local/tmp/hyperstack/backu
 - Push a tag `v*` → the `release` workflow builds a **signed** release APK and attaches it to
   the GitHub release. Tags containing `beta`, `alpha` or `rc` are published as **pre-releases**.
 - Rebuild an existing release without moving its tag:
-  `gh workflow run release.yml --ref refs/tags/v0.0.2-beta` (or Actions → release → Run workflow
+  `gh workflow run release.yml --ref refs/tags/v0.0.4-beta` (or Actions → release → Run workflow
   on that tag).
 
 ### Locally
@@ -86,8 +86,9 @@ original owner/SELinux context, and back up to `/data/local/tmp/hyperstack/backu
 
 ## Signing and updates
 
-So that `0.0.2-beta` installs **over** `0.0.1-beta` (Android requires the same signature), the
-release APK is signed with a stable keystore stored in repository secrets:
+So that a newer build (e.g. `0.0.4-beta`) installs **over** an older one (e.g. `0.0.3-beta`) —
+Android requires the same signature — the release APK is signed with a stable keystore stored in
+repository secrets:
 
 | Secret              | Value                                             |
 |---------------------|---------------------------------------------------|
@@ -116,7 +117,8 @@ still work.
 **What if I lose root, or my temporary root disappears after a reboot?**
 Nothing breaks — no bootloop, no crash, no brick. The unlock is just a preference stored in the
 launcher's own data (`/data/user_de/0/com.miui.home/shared_prefs/…`), which **persists across
-reboots**. With the flag set, stacking keeps working even with root gone. Without root the app
+reboots — both a soft reboot and a full reboot**. With the flag set, stacking keeps working even
+with root gone. Without root the app
 simply can't run its commands (it shows "Root not granted") and can't toggle the flag until root
 is back. The app has no boot-time service and does not auto-start, so it can never affect boot.
 
@@ -132,8 +134,8 @@ later — fixing an earlier bug where disabling could clear the launcher's prefe
 are applied by editing a single element and cycling the launcher; enable/disable leave the rest
 of your preferences intact.
 
-**Why is `0.0.1-beta` a pre-release?** Tags with `beta`/`alpha`/`rc` are published as
-pre-releases by the workflow.
+**Why are beta builds published as pre-releases?** Tags containing `beta`/`alpha`/`rc` are
+published as pre-releases by the workflow, so the latest stable release isn't shadowed.
 
 ## Known limitations
 
