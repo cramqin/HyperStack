@@ -135,6 +135,21 @@ of your preferences intact.
 **Why is `0.0.1-beta` a pre-release?** Tags with `beta`/`alpha`/`rc` are published as
 pre-releases by the workflow.
 
+## Known limitations
+
+These are HyperOS / App Vault behaviours that the preference unlock exposes but does **not**
+change:
+
+- **The "Add to stack" button (long‑press a stack → Edit stack) does nothing.** The launcher
+  tries to open `stack_add://com.mi.globalminusscreen`, but the Global App Vault (13.75.0)
+  does not expose that activity, so it resolves to nothing.
+  *Workaround:* **drag another same‑size MIUI widget onto the existing stack** to add it.
+- **Turning the module off while a stack exists dissolves it**, and a freed widget may be moved
+  to another slot (often the last page) because it now needs its own cell. If layout matters,
+  dissolve the stack in the UI *before* turning the module off. This is the launcher's placement
+  logic, not something the tool controls.
+- Stacks only accept **MIUI / App Vault widgets**, not third‑party Android widgets.
+
 ## Notes & disclaimer
 
 - The value is an internal Xiaomi debug switch; it can change or disappear in a future launcher
